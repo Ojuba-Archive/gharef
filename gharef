@@ -1,0 +1,88 @@
+#! /bin/bash
+# Gharef 0.1
+# Git Hub Archive Ready Employ Fedora
+# Under Waqf2 License (or GPLv3+ till Waqf2 accepted by OSI) 
+# By Mosaab Alzoubi (moceap@hotmail.com - fb.com/moceap)
+# Almasa Project
+# 1435-6-8
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+#--Vars--
+gh_arg="$@"
+gh_owner="$1"
+gh_project="$2"
+gh_commit="$3"
+gh_ver="0.1"
+gh_share="/usr/share"
+gh_maindir="$HOME/.gharef"
+gh_icon="$gh_share/pixmaps/gharef.png"
+gh_cache="$gh_maindir"/cache
+
+#--Detects--
+if ! [ -e "$HOME/rpmbuild/SOURCES" ]
+	then
+		mkdir -p "$HOME/rpmbuild/SOURCES"
+fi
+if ! [ -e "$gh_cache" ]
+	then
+		mkdir -p "$gh_cache"
+fi
+if ! test -x "`which wget 2>/dev/null`"
+    then
+        echo "wget isn't found re-install it before using Gharef."
+        exit
+fi
+if [ "$gh_arg" = "--gui" ]
+    then
+        GUI="true"
+        if ! test -x "`which gtkdialog 2>/dev/null`"
+            then
+                echo "gtkdialog isn't found re-install it before using Gharef."
+                exit
+        fi
+fi
+
+#--Terminal--
+if ! [ "$GUI" = "true" ]
+    then #--Start-of-terminal-part--
+
+
+if [ "$gh_arg" = "--version" ]
+	then
+		echo "$gh_ver"
+		exit
+fi
+if ! [ "$gh_arg" ]
+	then
+		gh_arg="--help"
+fi
+if [ "$gh_arg" = "--help" ]
+	then
+		echo "Gharef "$mo_ver" Git Hub Archive Ready Employ Fedora
+
+Fedora has rules for packaging projects that hosted
+on GitHub.
+
+Downloading and placing in the right position takes
+time from developers so Gharef doing that so simply.
+
+Usage of Gharef very easy, Just type:
+
+gharef {owner} {project} {commit}
+
+--gui to run Gharef in GUI mode (Not Yet).
+--help for help
+--language for change Gharef GUI language (Not Yet).
+--version for show version of Gharef."
+		exit
+fi
+pushd "$HOME/rpmbuild/SOURCES"
+if [ -e "$gh_project-$gh_commit.tar.gz" ]
+    then
+        rm $gh_project-$gh_commit.tar.gz
+fi        
+wget "https://github.com/$gh_owner/$gh_project/archive/$gh_commit/$gh_project-$gh_commit.tar.gz"
+popd
+fi #--End-of-terminal-part--
+
+#--GUI--#--Coming-Soon--
